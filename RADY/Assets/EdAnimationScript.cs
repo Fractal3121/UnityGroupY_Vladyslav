@@ -6,6 +6,9 @@ public class EdAnimationScript : MonoBehaviour
 {
     Animator edAnimator;
     float edSpeed = 2;
+    float edSpeedBack = 1;
+    float edRun = 4;
+    float edRunBack = 2;
     int turningSpeed = 55;
 
     // Start is called before the first frame update
@@ -16,7 +19,10 @@ public class EdAnimationScript : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {   
+    {
+        //Set up running condition for future
+        edAnimator.SetBool("isRunning", false);
+
         //Make Wave animation
 
         if (Input.GetKeyDown(KeyCode.H))
@@ -34,6 +40,12 @@ public class EdAnimationScript : MonoBehaviour
             //Rotation when walking
             if (Input.GetKey(KeyCode.E)) transform.Rotate(Vector3.up, turningSpeed * Time.deltaTime);
             if (Input.GetKey(KeyCode.Q)) transform.Rotate(Vector3.up, -turningSpeed * Time.deltaTime);
+            //Running
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+                edAnimator.SetBool("isRunning", true);
+                transform.position += edRun * transform.forward * Time.deltaTime; 
+            }
         }
         else edAnimator.SetBool("isWalking", false);
 
@@ -42,10 +54,16 @@ public class EdAnimationScript : MonoBehaviour
         if (Input.GetKey(KeyCode.S))
         {
             edAnimator.SetBool("isBackward", true);
-            transform.position -= (edSpeed - 1) * transform.forward * Time.deltaTime;
+            transform.position -= edSpeedBack * transform.forward * Time.deltaTime;
             //Rotation when walking
             if (Input.GetKey(KeyCode.E)) transform.Rotate(Vector3.up, turningSpeed * Time.deltaTime);
             if (Input.GetKey(KeyCode.Q)) transform.Rotate(Vector3.up, -turningSpeed * Time.deltaTime);
+            //Running
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+                edAnimator.SetBool("isRunning", true);
+                transform.position -= edRunBack * transform.forward * Time.deltaTime;
+            }
         }
         else edAnimator.SetBool("isBackward", false);
     }
