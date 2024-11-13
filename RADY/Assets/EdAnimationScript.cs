@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class EdAnimationScript : MonoBehaviour
 {
+    public GameObject bulletCloneTemplate;
+    Rigidbody rb;
     Animator edAnimator;
     float edSpeed = 2;
     float edSpeedBack = 1;
@@ -14,7 +16,8 @@ public class EdAnimationScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        edAnimator = GetComponent<Animator>();       
+        edAnimator = GetComponent<Animator>();
+        rb = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
@@ -66,5 +69,49 @@ public class EdAnimationScript : MonoBehaviour
             }
         }
         else edAnimator.SetBool("isBackward", false);
+
+        //Strafe Right animation
+
+        if (Input.GetKey(KeyCode.D))
+        {
+            edAnimator.SetBool("isStrafeRight", true);
+            transform.position += edSpeedBack * transform.right * Time.deltaTime;
+
+        }
+        else edAnimator.SetBool("isStrafeRight", false);
+
+        //Strafe Left animation
+
+        if (Input.GetKey(KeyCode.A))
+        {
+            edAnimator.SetBool("isStrafeLeft", true);
+            transform.position -= edSpeedBack * transform.right * Time.deltaTime;
+                 
+        }
+        else edAnimator.SetBool("isStrafeLeft", false);
+
+        //Impulse Jump
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            edAnimator.SetBool("isJumpStart", true);
+            rb.AddForce(new Vector3(0, 4, 0), ForceMode.Impulse);
+        }
+        else edAnimator.SetBool("isJumpStart", false);
+
+        //Mouse Rotation
+
+        transform.Rotate(Vector3.up, Input.GetAxis("Horizontal"), Space.World);
+
+        //Throwing 
+
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            edAnimator.SetBool("isThrow", true);
+            Instantiate(bulletCloneTemplate, transform.position, transform.rotation);
+        }
+        else edAnimator.SetBool("isThrow", false);
+
+
     }
 }
