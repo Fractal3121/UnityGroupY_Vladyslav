@@ -7,6 +7,8 @@ public class EdAnimationScript : MonoBehaviour
     public GameObject bulletCloneTemplate;
     Rigidbody rb;
     Animator edAnimator;
+    jump up;
+
     float edSpeed = 2;
     float edSpeedBack = 1;
     float edRun = 4;
@@ -18,6 +20,7 @@ public class EdAnimationScript : MonoBehaviour
     {
         edAnimator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
+        up = GetComponent<jump>();
     }
 
     // Update is called once per frame
@@ -92,13 +95,17 @@ public class EdAnimationScript : MonoBehaviour
 
         //Impulse Jump
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && CheckIfGrounded())
         {
             edAnimator.SetBool("isJumpStart", true);
             rb.AddForce(new Vector3(0, 4, 0), ForceMode.Impulse);
         }
         else edAnimator.SetBool("isJumpStart", false);
 
+        if(CheckIfGrounded()){
+            edAnimator.SetBool("isFalling", false);
+        }
+        else edAnimator.SetBool("isFalling", true);
         //Mouse Rotation
 
         transform.Rotate(Vector3.up, Input.GetAxis("Horizontal"), Space.World);
@@ -107,11 +114,18 @@ public class EdAnimationScript : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.G))
         {
+            Vector3 spawnPosition = transform.position + transform.forward*2;
             edAnimator.SetBool("isThrow", true);
-            Instantiate(bulletCloneTemplate, transform.position, transform.rotation);
+            Instantiate(bulletCloneTemplate, spawnPosition, transform.rotation);
         }
         else edAnimator.SetBool("isThrow", false);
 
 
+    }
+
+        public bool CheckIfGrounded()
+    {
+       return GetComponent<Rigidbody>().velocity.y == 0;
+        
     }
 }

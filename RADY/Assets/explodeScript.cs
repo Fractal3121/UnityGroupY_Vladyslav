@@ -6,13 +6,13 @@ using UnityEngine;
 public class explodeScript : MonoBehaviour
 {
     Rigidbody rb;
-    float explosionRad = 10;
-    float explosionStrength = 2000;
+    float explosionRad = 1;
+    float explosionStrength = 200;
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        rb.AddForce(45*transform.forward, ForceMode.Impulse);
+        rb.AddForce(5*transform.forward, ForceMode.Impulse);
     }
 
     // Update is called once per frame
@@ -31,7 +31,7 @@ public class explodeScript : MonoBehaviour
                     rigidbody.AddExplosionForce(explosionStrength, transform.position, explosionRad);
                 }
             }
-            Destroy(gameObject);
+            //Destroy(gameObject);
     }
 }   
 
